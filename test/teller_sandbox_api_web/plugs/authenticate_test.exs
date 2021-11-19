@@ -5,7 +5,7 @@ defmodule TellerSandboxApiWeb.AuthenticateTest do
     connection =
       conn
       |> put_req_header("authorization", "Basic #{Base.url_encode64("test_thing:")}")
-      |> TellerSandboxApiWeb.Authenticate.call(%{})
+      |> TellerSandboxApiWeb.Plugs.Authenticate.call(%{})
 
     assert connection.assigns.token == "thing"
   end
@@ -14,7 +14,7 @@ defmodule TellerSandboxApiWeb.AuthenticateTest do
     connection =
       conn
       |> put_req_header("authorization", "Basic #{Base.url_encode64("not a thing:")}")
-      |> TellerSandboxApiWeb.Authenticate.call(%{})
+      |> TellerSandboxApiWeb.Plugs.Authenticate.call(%{})
 
     assert connection.resp_body == "Unauthorized"
   end

@@ -8,7 +8,7 @@ defmodule TellerSandboxApiWeb.Router do
     plug :put_root_layout, {TellerSandboxApiWeb.LayoutView, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug TellerSandboxApiWeb.Authenticate
+    plug TellerSandboxApiWeb.Plugs.Authenticate
   end
 
   pipeline :api do
@@ -19,6 +19,7 @@ defmodule TellerSandboxApiWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    get "/accounts", TellerSandboxApiWeb.Controllers.AccountController, :get
   end
 
   # Other scopes may use custom stacks.

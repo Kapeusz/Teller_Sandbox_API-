@@ -8,4 +8,8 @@ defmodule TellerSandboxApi.Accounts.AccountDetail do
     embeds_one(:links, TellerSandboxApi.Accounts.AccountDetailLink)
     embeds_one(:routing_numbers, TellerSandboxApi.Accounts.AccountDetailRoutingNumber)
   end
+
+  # def last_four(account_id) do
+
+  # end
 end
