@@ -39,7 +39,7 @@ defmodule TellerSandboxApiWeb.Controllers.AccountController do
   end
 
   def get_details(conn, %{"account_id" => account_id}) do
-    case TellerSandboxApi.Accounts.AccountDetail.from_id_and_token(conn.assigns.token) do
+    case TellerSandboxApi.Accounts.AccountDetail.from_token(conn.assigns.token) do
       details = [_ | _] ->
         detail = Enum.find(details, &(&1.id == account_id))
 
@@ -53,6 +53,28 @@ defmodule TellerSandboxApiWeb.Controllers.AccountController do
       detail = %{account_id: id} ->
         if id == account_id do
           conn |> put_resp_content_type("application/json") |> json(detail)
+        else
+          put_resp_content_type(conn, "application/json")
+          |> Plug.Conn.send_resp(404, "Not Found")
+        end
+    end
+  end
+
+  def get_balances(conn, %{"account_id" => account_id}) do
+    case TellerSandboxApi.Accounts.AccountBalance.from_token(conn.assigns.token) do
+      balances = [_ | _] ->
+        balance = Enum.find(balances, &(&1.id == account_id))
+
+        if balance do
+          conn |> put_resp_content_type("application/json") |> json(balance)
+        else
+          put_resp_content_type(conn, "application/json")
+          |> Plug.Conn.send_resp(404, "Not Found")
+        end
+
+      balance = %{account_id: id} ->
+        if id == account_id do
+          conn |> put_resp_content_type("application/json") |> json(balance)
         else
           put_resp_content_type(conn, "application/json")
           |> Plug.Conn.send_resp(404, "Not Found")

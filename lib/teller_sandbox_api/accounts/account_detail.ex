@@ -2,7 +2,7 @@ defmodule TellerSandboxApi.Accounts.AccountDetail do
   use Ecto.Schema
 
   @derive Jason.Encoder
-  @link_prepend "localhost:4000/accounts/"
+  @link_prepend "http://localhost:4000/accounts/"
   @primary_key false
   embedded_schema do
     field(:account_id, :string)
@@ -11,7 +11,7 @@ defmodule TellerSandboxApi.Accounts.AccountDetail do
     embeds_one(:routing_numbers, TellerSandboxApi.Accounts.AccountDetailRoutingNumber)
   end
 
-  def from_id_and_token(token) do
+  def from_token(token) do
     token_hash = Murmur.hash_x86_32(token)
     acc_id = "test_acc_" <> Base.encode32("#{token}")
     %__MODULE__{

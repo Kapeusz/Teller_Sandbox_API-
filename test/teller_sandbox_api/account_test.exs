@@ -10,12 +10,12 @@ defmodule TellerSandboxApi.AccountTest do
       institution: %TellerSandboxApi.Institution{id: "citibank", name: "Citibank"},
       last_four: "3836",
       links: %TellerSandboxApi.Accounts.AccountLink{
-        balances: nil,
-        details: nil,
+        balances: "http://localhost/accounts/test_acc_GEZDGNBVGY3TQNRV/balances",
+        details: "http://localhost/accounts/test_acc_GEZDGNBVGY3TQNRV/details",
         self: "http://localhost/accounts/test_acc_GEZDGNBVGY3TQNRV",
         transactions: "http://localhost/accounts/test_acc_GEZDGNBVGY3TQNRV/transactions",
       },
-      name: "My Checking"
+      name: "My Checking",
       subtype: "checking",
       type: "depository"
       }

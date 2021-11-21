@@ -1,6 +1,3 @@
 defmodule TellerSandboxApiWeb.PageControllerTest do
-  use TellerSandboxApiWeb.ConnCase
-
-  test "disconnected and connected render" do
-  end
+  use TellerSandboxApiWeb.ConnCase, async: true
 end
