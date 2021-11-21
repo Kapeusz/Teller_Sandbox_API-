@@ -19,7 +19,9 @@ defmodule TellerSandboxApiWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    get "/accounts", TellerSandboxApiWeb.Controllers.AccountController, :get
+    get "/accounts", Controllers.AccountController, :all
+    get "/accounts/:account_id", Controllers.AccountController, :get
+    get "/accounts/:account_id/details", Controllers.AccountController, :get_details
   end
 
   # Other scopes may use custom stacks.

@@ -1,6 +1,6 @@
 defmodule TellerSandboxApi.Institution do
   use Ecto.Schema
-
+  @derive Jason.Encoder
   @primary_key false
   embedded_schema do
     field(:id, :string)
@@ -8,11 +8,11 @@ defmodule TellerSandboxApi.Institution do
   end
 
   def from_token_hash(token_hash) do
-    institutions = Enum.at(institutions, Integer.mod(token_hash, length(institutions)))
+    institution = Enum.at(institutions(), Integer.mod(token_hash, length(institutions())))
 
     %__MODULE__{
-      id: institutions.id,
-      name: institutions.name
+      id: institution.id,
+      name: institution.name
     }
   end
 
