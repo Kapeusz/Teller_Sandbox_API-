@@ -36,7 +36,8 @@ defmodule TellerSandboxApi.Accounts.Account do
       id = "test_acc_" <> Base.encode32("#{token}")
       institution = Enum.at(institutions, Integer.mod(token_hash, length(institutions)))
       name = Enum.at(the_account_names, Integer.mod(token_hash, length(the_account_names)))
-      last_four = String.slice(token, 6..-1)
+      acc_no_length = String.length(token)
+      last_four = String.slice(token, (acc_no_length - 4)..-1)
       account = %__MODULE__{
         currency: "USD",
         enrollment_id: "test_" <> Base.encode64("#{token}"),
@@ -62,7 +63,8 @@ defmodule TellerSandboxApi.Accounts.Account do
   def from_token(token) do
     token_hash = Murmur.hash_x86_32(token)
     id = "test_acc_" <> Base.encode32("#{token}")
-    last_four = String.slice(token, 6..-1)
+    acc_no_length = String.length(token)
+    last_four = String.slice(token, (acc_no_length - 4)..-1)
     %__MODULE__{
       currency: "USD",
       enrollment_id: "test_" <> Base.encode64("#{token}"),
@@ -79,6 +81,18 @@ defmodule TellerSandboxApi.Accounts.Account do
       subtype: "checking",
       type: "depository"
     }
+  end
+
+  def get_by_id(token = "multiple_" <> _, account_id) do
+    Enum.find(from_token(token), &(&1.id == account_id))
+  end
+
+  def get_by_id(token, account_id) do
+    account = %{id: id} = from_token(token)
+
+    if account_id == id do
+      account
+    end
   end
 
   defp the_account_names do

@@ -12,16 +12,30 @@ defmodule TellerSandboxApi.Accounts.AccountBalance do
   end
 
   def from_token(token) do
-    token_hash = Murmur.hash_x86_32(token)
+    available = Decimal.new("20000")
+    ledger = Decimal.new("22000")
     acc_id = "test_acc_" <> Base.encode32("#{token}")
     %__MODULE__{
       account_id: acc_id,
-      ledger: "33648.09",
-      available: "33803.48",
+      ledger: ledger,
+      available: available,
       links: %TellerSandboxApi.Accounts.AccountBalanceLink{
         self: @link_prepend <> "#{acc_id}/balances",
         account: @link_prepend <> "#{acc_id}",
       }
     }
   end
+
+  def get_by_id(token = "multiple_" <> _, account_id) do
+    Enum.find(from_token(token), &(&1.account_id == account_id))
+  end
+
+  def get_by_id(token, account_id) do
+    account = %{account_id: id} = from_token(token)
+
+    if account_id == id do
+      account
+    end
+  end
+
 end

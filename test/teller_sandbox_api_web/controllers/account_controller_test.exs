@@ -48,7 +48,7 @@ defmodule TellerSandboxApiWeb.AccountControllerTest do
               "id" => "capital_one",
               "name" => "Capital One"
             },
-            "last_four" => "235",
+            "last_four" => "4235",
             "links"=>
             %{
               "balances" => "http://localhost:4000/accounts/test_acc_G43TEMRYGQZDGNI=/balances",
@@ -180,7 +180,7 @@ defmodule TellerSandboxApiWeb.AccountControllerTest do
       assert response ==
         %{
           "account_id" => "test_acc_GEZDGNBVGY3TQOJQ",
-          "account_number" => 1234567890,
+          "account_number" => "1234567890",
           "links"  =>
           %{
             "account" => "http://localhost:4000/accounts/test_acc_GEZDGNBVGY3TQOJQ",

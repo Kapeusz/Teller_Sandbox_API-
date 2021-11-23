@@ -16,3 +16,5 @@ config :logger, level: :warn
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config(:teller_sandbox_api, date_module: DateMock)

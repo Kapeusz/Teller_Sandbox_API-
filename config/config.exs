@@ -14,6 +14,9 @@ config :teller_sandbox_api, TellerSandboxApiWeb.Endpoint,
   pubsub_server: TellerSandboxApi.PubSub,
   live_view: [signing_salt: "31ZOJzC6"]
 
+
+config(:teller_sandbox_api, date_module: Date)
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails

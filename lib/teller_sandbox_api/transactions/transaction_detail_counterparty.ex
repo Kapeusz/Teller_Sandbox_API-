@@ -1,6 +1,6 @@
 defmodule TellerSandboxApi.Transactions.TransactionDetailCounterparty do
   use Ecto.Schema
-
+  @derive Jason.Encoder
   @primary_key false
   embedded_schema do
     field(:name, :string)
