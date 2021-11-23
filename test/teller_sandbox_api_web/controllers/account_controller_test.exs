@@ -180,7 +180,7 @@ defmodule TellerSandboxApiWeb.AccountControllerTest do
       assert response ==
         %{
           "account_id" => "test_acc_GEZDGNBVGY3TQOJQ",
-          "account_number" => "1234567890",
+          "account_number" => "34567890",
           "links"  =>
           %{
             "account" => "http://localhost:4000/accounts/test_acc_GEZDGNBVGY3TQOJQ",
@@ -219,8 +219,8 @@ defmodule TellerSandboxApiWeb.AccountControllerTest do
       assert response ==
         %{
           "account_id" => "test_acc_GEZDGNBVGY3TQOJQ",
-          "ledger" => "33648.09",
-          "available" => "33803.48",
+          "ledger" => "22000",
+          "available" => "20000",
           "links"  =>
           %{
             "self" => "http://localhost:4000/accounts/test_acc_GEZDGNBVGY3TQOJQ/balances",
