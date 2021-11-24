@@ -18,3 +18,4 @@ config :logger, level: :warn
 config :phoenix, :plug_init_mode, :runtime
 
 config(:teller_sandbox_api, date_module: DateMock)
+config(:teller_sandbox_api, date_module: DateMock, dashboard_module: DashboardMock)

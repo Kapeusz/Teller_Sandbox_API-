@@ -16,17 +16,25 @@ defmodule TellerSandboxApi.Transactions.Transaction do
     field(:type, :string)
   end
 
-
+  @doc """
+  Generates 90 transaction - 1 per day.
+  """
 
   def generate_transactions_from_account(account = %TellerSandboxApi.Accounts.AccountBalance{}) do
     hash = Murmur.hash_x86_32(account)
     today = date().utc_today()
     the_past = Date.add(today, -89)
 
+    #The total spend of all transactions needs to drop at the available balance of the aacount.
+    # We have to work backwards. We do that by generating a total spend for tha last
+    # 90 transactions, then picking varying but repeatable transaction amount for each transaction,
+    # such that the total of all transactions minus the starting balance equal the account balance
+
     balance_in_pennies = account.available
       |> Decimal.mult(Decimal.new("100"))
       |> Decimal.to_integer()
 
+    # Picks a "random" number between 0 and the current balance
     total_spend_transactions =
       Integer.mod(Murmur.hash_x86_32(account.available), balance_in_pennies)
       |> Decimal.new()
@@ -75,6 +83,7 @@ defmodule TellerSandboxApi.Transactions.Transaction do
 
   defp amount(balance, transactions_left) do
     hundred = Decimal.new("100")
+    # Convert to pennies, so we make the reange easier.
     balance_in_pennies = balance |> Decimal.mult(Decimal.new("100")) |> Decimal.to_integer()
     max_transaction_cost_in_pennies =
       (balance_in_pennies - transactions_left * @min_transaction_cost_in_pennies) /
@@ -87,6 +96,7 @@ defmodule TellerSandboxApi.Transactions.Transaction do
 
   defp date(), do: Application.fetch_env!(:teller_sandbox_api, :date_module)
 
+  # Returns the transaction with the given id or nil if it can't be found.
   def get_by_id(token, account_id, transaction_id) do
     with account = %{} <- TellerSandboxApi.Accounts.AccountBalance.get_by_id(token, account_id),
          transactions = [_ | _] <- generate_transactions_from_account(account) do

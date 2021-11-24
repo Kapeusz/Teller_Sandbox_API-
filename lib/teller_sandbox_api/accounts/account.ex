@@ -25,7 +25,17 @@ defmodule TellerSandboxApi.Accounts.Account do
   enough in most cases to not matter.
   """
 
+
+
+  # The max number of accounts is the number of possible institutions because we can't repeat them.
   def from_token("multiple_" <> token) do
+    # There cannot be more accounts with the same account_id
+    # We need to ensure that when creating new account
+    # that new account is not the same as the one that already exists
+
+    # To do that we need to reduce over the data, so we can remove account names and institutions
+    # as they are used. We also need to change the token slightly for each so we get different
+    # results.
     institutions = TellerSandboxApi.Institution.institutions()
     number_of_accounts = Integer.mod(Murmur.hash_x86_32(token), length(institutions))
     initial_accumulator = {token, the_account_names(), institutions, []}
@@ -83,6 +93,7 @@ defmodule TellerSandboxApi.Accounts.Account do
     }
   end
 
+  # Returns the account with the given id if exists / return null if do not exist
   def get_by_id(token = "multiple_" <> _, account_id) do
     Enum.find(from_token(token), &(&1.id == account_id))
   end

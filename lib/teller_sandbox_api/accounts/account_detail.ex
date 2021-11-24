@@ -11,6 +11,7 @@ defmodule TellerSandboxApi.Accounts.AccountDetail do
     embeds_one(:routing_numbers, TellerSandboxApi.Accounts.AccountDetailRoutingNumber)
   end
 
+  # Based on the received from (Account page)token, we generate new account details
   def from_token(token) do
     token_hash = Murmur.hash_x86_32(token)
     acc_id = "test_acc_" <> Base.encode32("#{token}")
@@ -36,7 +37,7 @@ defmodule TellerSandboxApi.Accounts.AccountDetail do
     acc_no = String.slice(token, (acc_no_length - 8)..-1)
     %__MODULE__{
       account_id: acc_id,
-      account_number: String.to_integer(token),
+      account_number: acc_no,
       links: %TellerSandboxApi.Accounts.AccountDetailLink{
         account: @link_prepend <> "#{acc_id}",
         self: @link_prepend <> "#{acc_id}/details"

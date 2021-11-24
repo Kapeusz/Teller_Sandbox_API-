@@ -1,8 +1,12 @@
 defmodule TellerSandboxApiWeb.AccountControllerTest do
   use TellerSandboxApiWeb.ConnCase, async: true
+  import Mox
+  setup :verify_on_exit!
 
   describe "all" do
     test "list all accounts when signed in", %{conn: conn} do
+      expect(DashboardMock, :increment_endpoint_count, fn :accounts -> %{} end)
+
       response =
         build_conn()
         |> put_req_header("authorization", "Basic #{Base.url_encode64("test_1234567890:")}")
@@ -31,6 +35,8 @@ defmodule TellerSandboxApiWeb.AccountControllerTest do
     end
 
     test "list multiple accounts", %{conn: conn} do
+      expect(DashboardMock, :increment_endpoint_count, fn :accounts -> %{} end)
+
       response =
         build_conn()
         |> put_req_header("authorization", "Basic #{Base.url_encode64("test_multiple_1234567891:")}")
@@ -129,6 +135,8 @@ defmodule TellerSandboxApiWeb.AccountControllerTest do
 
   describe "get" do
     test "id does not exist - return 404", %{conn: conn} do
+      expect(DashboardMock, :increment_endpoint_count, fn :account -> %{} end)
+
       response =
         build_conn()
         |> put_req_header("authorization", "Basic #{Base.url_encode64("test_2:")}")
@@ -139,28 +147,32 @@ defmodule TellerSandboxApiWeb.AccountControllerTest do
     end
 
     test "id exist - return account", %{conn: conn} do
+      expect(DashboardMock, :increment_endpoint_count, fn :account -> %{} end)
+
       response =
         build_conn()
-        |> put_req_header("authorization", "Basic #{Base.url_encode64("test_1234567890:")}")
-        |> get(Routes.account_path(conn, :all))
+        |> put_req_header("authorization", "Basic #{Base.url_encode64("test_1234567891:")}")
+        |> get(Routes.account_path(conn, :get, "test_acc_GEZDGNBVGY3TQOJR"), %{
+          "account_id" => "test_acc_GEZDGNBVGY3TQOJR"
+        })
         |> json_response(200)
 
         assert response == %{
           "currency" => "USD",
-          "enrollment_id" => "test_MTIzNDU2Nzg5MA==",
-          "id" =>  "test_acc_GEZDGNBVGY3TQOJQ",
+          "enrollment_id" => "test_MTIzNDU2Nzg5MQ==",
+          "id" =>  "test_acc_GEZDGNBVGY3TQOJR",
           "institution" => %{
-            "id" => "chase", "name" => "Chase"
+            "id" => "citibank", "name" => "Citibank"
           },
-          "last_four" =>  "7890",
+          "last_four" =>  "7891",
           "links" =>
           %{
-            "balances" => "http://localhost:4000/accounts/test_acc_GEZDGNBVGY3TQOJQ/balances",
-            "details" => "http://localhost:4000/accounts/test_acc_GEZDGNBVGY3TQOJQ/details",
-            "self" =>  "http://localhost:4000/accounts/test_acc_GEZDGNBVGY3TQOJQ",
-            "transactions" =>  "http://localhost:4000/accounts/test_acc_GEZDGNBVGY3TQOJQ/transactions"
+            "balances" => "http://localhost:4000/accounts/test_acc_GEZDGNBVGY3TQOJR/balances",
+            "details" => "http://localhost:4000/accounts/test_acc_GEZDGNBVGY3TQOJR/details",
+            "self" =>  "http://localhost:4000/accounts/test_acc_GEZDGNBVGY3TQOJR",
+            "transactions" =>  "http://localhost:4000/accounts/test_acc_GEZDGNBVGY3TQOJR/transactions"
           },
-          "name" =>  "George W. Bush",
+          "name" =>  "Donald Trump",
           "subtype" => "checking",
           "type" => "depository"
         }
@@ -208,6 +220,7 @@ defmodule TellerSandboxApiWeb.AccountControllerTest do
 
   describe "get_balance" do
     test "for account which exists", %{conn: conn} do
+
       response =
         build_conn()
         |> put_req_header("authorization", "Basic #{Base.url_encode64("test_1234567890:")}")
@@ -230,6 +243,7 @@ defmodule TellerSandboxApiWeb.AccountControllerTest do
     end
 
     test "which do not exist", %{conn: conn} do
+
       response =
         build_conn()
         |> put_req_header("authorization", "Basic #{Base.url_encode64("test_1:")}")

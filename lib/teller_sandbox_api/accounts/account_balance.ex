@@ -11,6 +11,7 @@ defmodule TellerSandboxApi.Accounts.AccountBalance do
     embeds_one(:links, TellerSandboxApi.Accounts.AccountBalanceLink)
   end
 
+  # Based on the token passed from Account page we generate new balance information
   def from_token(token) do
     available = Decimal.new("20000")
     ledger = Decimal.new("22000")
@@ -26,6 +27,7 @@ defmodule TellerSandboxApi.Accounts.AccountBalance do
     }
   end
 
+  # We get account details by the id of the account
   def get_by_id(token = "multiple_" <> _, account_id) do
     Enum.find(from_token(token), &(&1.account_id == account_id))
   end

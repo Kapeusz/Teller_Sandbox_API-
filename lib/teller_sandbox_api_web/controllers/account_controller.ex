@@ -9,6 +9,7 @@ defmodule TellerSandboxApiWeb.Controllers.AccountController do
   # even after application restarts.
 
   def all(conn, _) do
+    dashboard().increment_endpoint_count(:accounts)
     accounts = TellerSandboxApi.Accounts.Account.from_token(conn.assigns.token)
 
     conn
@@ -16,7 +17,9 @@ defmodule TellerSandboxApiWeb.Controllers.AccountController do
     |> json(accounts)
   end
 
+  # Get the specific account if id = id (if exists)
   def get(conn, %{"account_id" => account_id}) do
+    dashboard().increment_endpoint_count(:account)
     case TellerSandboxApi.Accounts.Account.from_token(conn.assigns.token) do
       accounts = [_ | _] ->
         account = Enum.find(accounts, &(&1.id == account_id))
@@ -81,4 +84,6 @@ defmodule TellerSandboxApiWeb.Controllers.AccountController do
         end
     end
   end
+
+  defp dashboard(), do: Application.fetch_env!(:teller_sandbox_api, :dashboard_module)
 end

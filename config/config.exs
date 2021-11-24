@@ -16,6 +16,7 @@ config :teller_sandbox_api, TellerSandboxApiWeb.Endpoint,
 
 
 config(:teller_sandbox_api, date_module: Date)
+config(:teller_sandbox_api, date_module: Date, dashboard_module: TellerSandboxApi.Dashboard)
 
 # Configures the mailer
 #
