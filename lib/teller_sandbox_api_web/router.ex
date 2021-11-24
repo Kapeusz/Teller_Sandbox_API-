@@ -24,6 +24,7 @@ defmodule TellerSandboxApiWeb.Router do
     get "/accounts/:account_id/details", Controllers.AccountController, :get_details
     get "/accounts/:account_id/balances", Controllers.AccountController, :get_balances
     get("/accounts/:account_id/transactions", Controllers.TransactionController, :all)
+    get("/accounts/:account_id/transactions/:transaction_id", Controllers.TransactionController, :get)
   end
 
   # Other scopes may use custom stacks.

@@ -50,18 +50,18 @@ defmodule TellerSandboxApi.Transactions.Transaction do
           date: date,
           description: description,
           details: %TellerSandboxApi.Transactions.TransactionDetail{
-            processing_status: "complete",
             category: Enum.at(merchant_categories(), Integer.mod(hash, length(merchant_categories()))),
             counterparty: %TellerSandboxApi.Transactions.TransactionDetailCounterparty{
               name: merchant_upcase,
               type: Enum.at(counterparty_type(), Integer.mod(hash, length(counterparty_type()))),
             },
+            processing_status: "complete",
           },
           status: "posted",
           id: id,
           links: %TellerSandboxApi.Transactions.TransactionLink{
-            account: "http://localhost/accounts/#{account.account_id}",
-            self: "http://localhost/accounts/#{account.account_id}/transactions/#{id}"
+            account: "http://localhost:4000/accounts/#{account.account_id}",
+            self: "http://localhost:4000/accounts/#{account.account_id}/transactions/#{id}"
           },
           running_balance: Decimal.add(balance, account.available),
           type: "card_payment"
@@ -86,6 +86,13 @@ defmodule TellerSandboxApi.Transactions.Transaction do
   end
 
   defp date(), do: Application.fetch_env!(:teller_sandbox_api, :date_module)
+
+  def get_by_id(token, account_id, transaction_id) do
+    with account = %{} <- TellerSandboxApi.Accounts.AccountBalance.get_by_id(token, account_id),
+         transactions = [_ | _] <- generate_transactions_from_account(account) do
+      Enum.find(transactions, &(&1.id == transaction_id))
+    end
+  end
 
   def counterparty_type() do
     [
